@@ -5716,7 +5716,7 @@ class AppContent extends React.Component {
         };
     }
     render() {
-        return (React.createElement("div", { id: "app-content", className: "app__content" }, this.content()));
+        return (React.createElement("div", { id: "app-content", className: "app__content", "data-content": this.props.navPage }, this.content()));
     }
 }
 exports.default = AppContent;
@@ -5956,15 +5956,21 @@ class RegisterForm extends React.Component {
     }
     render() {
         return [
-            React.createElement("div", { key: 1, className: "register-pls" },
-                React.createElement("a", { href: "/", onClick: this.onClick }, "Sign up!")),
+            React.createElement("div", { key: 1, id: "register", className: "register" },
+                React.createElement("a", { id: "register__link", href: "/", onClick: this.onClick }, "Sign up!")),
             React.createElement(Modal, { key: 2, isOpen: this.state.modalOpen, onRequestClose: this.onModalClose },
                 React.createElement("div", null,
                     React.createElement("form", { onSubmit: this.onSubmit },
-                        React.createElement("input", { type: "text", id: "email", name: "email", onChange: this.onChange_email }),
-                        React.createElement("input", { type: "text", id: "username", name: "username", onChange: this.onChange_username }),
-                        React.createElement("input", { type: "password", id: "password", name: "password", onChange: this.onChange_password }),
-                        React.createElement("button", { type: "submit", id: "submit" }, "Submit"))),
+                        React.createElement("div", null,
+                            React.createElement("span", null, "Email:"),
+                            React.createElement("input", { type: "text", id: "register-modal__email", name: "email", onChange: this.onChange_email })),
+                        React.createElement("div", null,
+                            React.createElement("span", null, "Username:"),
+                            React.createElement("input", { type: "text", id: "register-modal__username", name: "username", onChange: this.onChange_username })),
+                        React.createElement("div", null,
+                            React.createElement("span", null, "Password:"),
+                            React.createElement("input", { type: "password", id: "register-modal__password", name: "password", onChange: this.onChange_password })),
+                        React.createElement("button", { type: "submit", id: "register-modal__submit" }, "Submit"))),
                 React.createElement("button", { onClick: this.onModalClose }, "Close"))
         ];
     }
@@ -6346,13 +6352,21 @@ class ChallengeTile extends React.Component {
         this.setState({ modalOpen: false, message: "" });
     }
     render() {
+        var hint = undefined;
+        var solution = undefined;
+        if (this.props.challenge.hinted) {
+            hint = React.createElement("div", { "data-id": "hint", className: "challenge-tile__hint" }, this.props.challenge.hint);
+        }
+        if (this.props.challenge.solved) {
+            solution = React.createElement("div", { "data-id": "solution", className: "challenge-tile__soution" }, this.props.challenge.solution);
+        }
         return [
-            React.createElement("div", { className: "challenge-tile", onClick: this.onClick },
-                React.createElement("div", { className: "challenge-tile__title" }, this.props.challenge.title),
-                React.createElement("div", { className: "challenge-tile__category" }, this.props.challenge.category),
-                React.createElement("div", null, this.props.challenge.hint),
-                React.createElement("div", null, this.props.challenge.solution)),
-            React.createElement(Modal, { isOpen: this.state.modalOpen, onRequestClose: this.onModalClose },
+            React.createElement("div", { key: 1, "data-id": String(this.props.challenge.id), className: "challenge-tile", onClick: this.onClick },
+                React.createElement("div", { "data-id": "title", className: "challenge-tile__title" }, this.props.challenge.title),
+                React.createElement("div", { "data-id": "category", className: "challenge-tile__category" }, this.props.challenge.category),
+                hint,
+                solution),
+            React.createElement(Modal, { key: 2, isOpen: this.state.modalOpen, onRequestClose: this.onModalClose },
                 React.createElement("div", null, this.props.challenge.body),
                 React.createElement("div", null,
                     React.createElement("ul", null, this.state.files.map(file => (React.createElement("li", null,
@@ -6988,9 +7002,9 @@ exports.default = reduxApp;
 Object.defineProperty(exports, "__esModule", { value: true });
 var NavPage;
 (function (NavPage) {
-    NavPage[NavPage["ABOUT"] = 0] = "ABOUT";
-    NavPage[NavPage["CTF"] = 1] = "CTF";
-    NavPage[NavPage["ADMIN"] = 2] = "ADMIN";
+    NavPage["ABOUT"] = "ABOUT";
+    NavPage["CTF"] = "CTF";
+    NavPage["ADMIN"] = "ADMIN";
 })(NavPage = exports.NavPage || (exports.NavPage = {}));
 var SubmissionStatus;
 (function (SubmissionStatus) {
